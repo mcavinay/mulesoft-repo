@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="27babfb7-3600-4908-8d7f-b442df0e7871" >
+		<http:listener-connection host="0.0.0.0" port="${https.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:key-store type="jks" path="testkey.jks" alias="testkey" keyPassword="password" password="password" />
+			</tls:context>
+		</http:listener-connection>
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="2ecaec9b-5fe4-445f-88f8-abd382768efb" file="local.properties" />
+	<global-property doc:name="Global Property" doc:id="ec06b8ee-d89c-42d1-b4f0-5b56435e185b" name="secure.key" value="testkey" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="bc9495ff-f6e0-4767-93f4-78ca205ad76b" file="local.properties" key="${secure.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+	<flow name="testFlow" doc:id="c92e69ec-10c0-4d3d-aa6e-c80351f7c2f0" >
+		<http:listener doc:name="Listener" doc:id="20f9274d-a521-41ad-bcbc-c091ae7392df" config-ref="HTTP_Listener_config" path="test"/>
+		<set-payload value='${secure::username}' doc:name="Set Payload" doc:id="97df2eb4-39f1-4302-9983-fdce8d6c5ddb" />
+	</flow>
+</mule>
