@@ -106,7 +106,7 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
-    <flow name="sendsmsapi-console">
+	<flow name="sendsmsapi-console">
         <http:listener config-ref="sendsmsapi-httpListenerConfig" path="/console/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
@@ -133,9 +133,11 @@ output application/json
             </on-error-propagate>
         </error-handler>
     </flow>
-    <flow name="post:\text:application\json:sendsmsapi-config">
-        <http:listener doc:name="Listener" doc:id="ae93557c-6a09-4d85-bc8d-229f84408c45" config-ref="sendsmsapi-httpListenerConfig" path="/text"/>
+	<flow name="post:\text:application\json:sendsmsapi-config">
+        <http:listener doc:name="Listener" doc:id="ae93557c-6a09-4d85-bc8d-229f84408c45" config-ref="sendsmsapi-httpListenerConfig" path="/text" />
 		<logger level="INFO" message="Testing Message" />
-		<set-payload value='#[output application/java&#10;---&#10;attributes.listenerPath]' doc:name="Set Payload" doc:id="240ebcde-c9df-4bea-a5b2-41b692044057" />
+		<set-payload value="#[output application/java
+&#10;---
+&#10;attributes.listenerPath]" doc:name="Set Payload" doc:id="240ebcde-c9df-4bea-a5b2-41b692044057" />
     </flow>
 </mule>
